@@ -1,0 +1,21 @@
+name: "Build"
+on:
+  push:
+    branches:
+      - master
+  schedule:
+    # Random time each week.
+    - cron:  '22 3 * * 2'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: silvenga-docker/build-image@latest
+      with:
+        dockerRegistery: ghcr.io
+        dockerUserName: ${{ secrets.GHCR_USER }}
+        dockerPassword: ${{ secrets.GHCR_PAT }}
+        dockerImageName: ${{ github.repository }}
+        dockerTags: latest,${{ github.sha }}
